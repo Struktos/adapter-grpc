@@ -1,6 +1,6 @@
 {
   "name": "@struktos/adapter-grpc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "gRPC adapter for Struktos.js - Enterprise-grade gRPC integration with context propagation and middleware support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
