@@ -1,9 +1,11 @@
 # @struktos/adapter-grpc
 
-> gRPC adapter for Struktos.js - Enterprise-grade gRPC integration with context propagation and middleware support.
+> gRPC adapter for Struktos.js - Enterprise-grade gRPC integration with context propagation and middleware support
 
 [![npm version](https://img.shields.io/npm/v/@struktos/adapter-grpc.svg)](https://www.npmjs.com/package/@struktos/adapter-grpc)
+[![CI](https://github.com/struktosjs/adapter-grpc/actions/workflows/ci.yml/badge.svg)](https://github.com/struktosjs/adapter-grpc/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org)
 
 ## 🎯 Overview
 
@@ -15,6 +17,7 @@
 - ✅ **Interceptor System** - Wrap all service methods with middleware
 - ✅ **Health Checks** - Built-in gRPC health check service
 - ✅ **All RPC Types** - Unary, server streaming, client streaming, bidirectional
+- ✅ **Fully Tested** - 69+ tests with unit and integration coverage
 
 ## 📦 Installation
 
@@ -357,6 +360,203 @@ METADATA_KEYS.REQUEST_ID      // 'x-request-id'
 METADATA_KEYS.USER_ID         // 'x-user-id'
 METADATA_KEYS.AUTHORIZATION   // 'authorization'
 METADATA_KEYS.CORRELATION_ID  // 'x-correlation-id'
+```
+
+## 🧪 Testing
+
+The package includes comprehensive test coverage with both unit and integration tests.
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run unit tests only
+npm run test:unit
+
+# Run integration tests only
+npm run test:integration
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### Test Structure
+
+```
+tests/
+├── unit/
+│   ├── id-generator.test.ts      # ID generation utilities
+│   ├── context-factory.test.ts   # Context transformation
+│   ├── grpc-adapter.test.ts      # Adapter functionality
+│   └── interceptor.test.ts       # Middleware interceptors
+├── integration/
+│   └── grpc-server.test.ts       # Full server/client tests
+├── fixtures/
+│   └── test.proto                # Test proto files (auto-generated)
+└── setup.ts                      # Jest setup
+```
+
+### Test Coverage
+
+| Component | Tests | Coverage |
+|-----------|-------|----------|
+| ID Generator | 11 | ✅ |
+| Context Factory | 19 | ✅ |
+| gRPC Adapter | 21 | ✅ |
+| Interceptors | 10 | ✅ |
+| Integration | 8 | ✅ |
+| **Total** | **69** | **70%+** |
+
+### Writing Tests
+
+```typescript
+import { GrpcStruktosAdapter, createGrpcAdapter } from '@struktos/adapter-grpc';
+
+describe('My gRPC Service', () => {
+  let adapter: GrpcStruktosAdapter;
+
+  beforeEach(async () => {
+    adapter = createGrpcAdapter();
+    await adapter.init([]);
+  });
+
+  afterEach(async () => {
+    if (adapter.isRunning()) {
+      await adapter.stop();
+    }
+  });
+
+  it('should handle requests', async () => {
+    // Add your service
+    adapter.addService(definition, implementation);
+    
+    // Start server
+    await adapter.start(50099);
+    
+    // Test with client...
+  });
+});
+```
+
+## 🔄 CI/CD
+
+### GitHub Actions Workflows
+
+The package includes three GitHub Actions workflows:
+
+#### 1. CI (`ci.yml`)
+Runs on every push and pull request:
+- Tests on Node.js 18, 20, 22
+- TypeScript type checking
+- Build verification
+
+#### 2. Auto Release (`auto-release.yml`)
+Automatically releases when pushing to main with version changes:
+- Detects version change in `package.json`
+- Runs tests
+- Creates GitHub Release
+- Publishes to npm
+
+#### 3. Manual Release (`release.yml`)
+Triggered by tag push or manual workflow dispatch:
+- Creates GitHub Release with changelog
+- Publishes to npm
+
+### Release Process
+
+#### Automatic Release (Recommended)
+
+```bash
+# 1. Bump version
+npm version patch  # 0.1.0 → 0.1.1
+# or
+npm version minor  # 0.1.0 → 0.2.0
+# or
+npm version major  # 0.1.0 → 1.0.0
+
+# 2. Push to main
+git push origin main
+
+# → Auto: Test → Tag → GitHub Release → npm publish
+```
+
+#### Manual Release
+
+```bash
+# Using release script
+./scripts/release.sh patch
+./scripts/release.sh minor
+./scripts/release.sh major
+```
+
+### Required Secrets
+
+Configure these in GitHub repository settings:
+
+| Secret | Description |
+|--------|-------------|
+| `NPM_TOKEN` | npm authentication token |
+
+## 🛠️ Development
+
+### Setup
+
+```bash
+# Clone repository
+git clone https://github.com/struktosjs/adapter-grpc.git
+cd adapter-grpc
+
+# Install dependencies
+npm install
+
+# Build
+npm run build
+
+# Run tests
+npm test
+```
+
+### Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run build` | Compile TypeScript |
+| `npm test` | Run all tests |
+| `npm run test:unit` | Run unit tests |
+| `npm run test:integration` | Run integration tests |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:coverage` | Run tests with coverage |
+| `npm run example` | Run example server |
+| `npm run example:client` | Run example client |
+
+### Project Structure
+
+```
+@struktos/adapter-grpc/
+├── src/
+│   ├── adapter/          # Main adapter implementation
+│   ├── context/          # Context transformation
+│   ├── interceptors/     # Middleware interceptors
+│   ├── types/            # TypeScript types
+│   ├── utils/            # Utilities
+│   └── index.ts          # Main exports
+├── tests/
+│   ├── unit/             # Unit tests
+│   ├── integration/      # Integration tests
+│   └── setup.ts          # Test setup
+├── examples/
+│   ├── basic-server.ts   # Example server
+│   └── basic-client.ts   # Example client
+├── protos/
+│   └── example.proto     # Example proto
+├── .github/workflows/    # CI/CD workflows
+└── scripts/
+    └── release.sh        # Release script
 ```
 
 ## 🤝 Related Packages
