@@ -1,6 +1,6 @@
 # @struktos/adapter-grpc
 
-> gRPC adapter for Struktos.js - Enterprise-grade gRPC integration with context propagation and middleware support
+> gRPC adapter for Struktos.js - Enterprise-grade gRPC integration with context propagation and middleware support.
 
 [![npm version](https://img.shields.io/npm/v/@struktos/adapter-grpc.svg)](https://www.npmjs.com/package/@struktos/adapter-grpc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
